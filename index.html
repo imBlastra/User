@@ -64,10 +64,209 @@
     </div>
   </div>
   <script>
-  // The following code is obfuscated for ARG security (decryption/review possible by @imBlastra or Copilot)
-(function(){
-var _0x4b9e=["\x55\x73\x65\x72","\x45\x78\x74\x65\x72\x6E\x61\x6C","\x65\x72\x72\x6F\x72\x2D\x39\x35\x32\x37\x51","\x6C\x6F\x67\x69\x6E\x2D\x73\x65\x63\x74\x69\x6F\x6E","\x74\x65\x72\x6D\x69\x6E\x61\x6C\x2D\x73\x65\x63\x74\x69\x6F\x6E","\x76\x61\x6C\x75\x65","\x74\x72\x69\x6D","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x73\x74\x79\x6C\x65","\x64\x69\x73\x70\x6C\x61\x79","\x62\x6C\x6F\x63\x6B","\x66\x6F\x63\x75\x73","\x61\x64\x64\x45\x76\x65\x6E\x74\x4C\x69\x73\x74\x65\x6E\x65\x72","\x6B\x65\x79","\x45\x6E\x74\x65\x72","\x73\x70\x6C\x69\x63\x65","\x6C\x65\x6E\x67\x74\x68","\x70\x61\x64\x4C\x69\x6E\x65","\x70\x75\x73\x68","\x6A\x6F\x69\x6E","\x74\x65\x78\x43\x6F\x6E\x74\x65\x6E\x74","\x70\x61\x64\x53\x74\x72\x69\x6E\x67","\x70\x61\x64\x4C\x69\x6E\x65\x73","\x6A\x6F\x69\x6E","\x73\x70\x6C\x69\x63\x65","\x72\x65\x70\x6C\x61\x63\x65","\x62\x6F\x74\x74\x6F\x6D"];var username=_0x4b9e[0],password=_0x4b9e[1],admincode=_0x4b9e[2],loginSection=document[_0x4b9e[7]](_0x4b9e[3]),terminalSection=document[_0x4b9e[7]](_0x4b9e[4]),loginBtn=document[_0x4b9e[7]]("login-btn"),loginError=document[_0x4b9e[7]]("login-error"),usernameInput=document[_0x4b9e[7]]("username"),passwordInput=document[_0x4b9e[7]]("password"),terminalInput=document[_0x4b9e[7]]("terminal-input"),terminalAscii=document[_0x4b9e[7]]("terminal-ascii");usernameInput[_0x4b9e[11]]();loginBtn.onclick=function(){var _0xcc14=[_0x4b9e[5],_0x4b9e[6]];if(usernameInput[_0xcc14[0]][_0xcc14[1]]()===username&&passwordInput[_0xcc14[0]][_0xcc14[1]]()===password){loginSection[_0x4b9e[8]][_0x4b9e[9]]=_0x4b9e[10];terminalSection[_0x4b9e[8]][_0x4b9e[9]]="";setTimeout(function(){terminalInput[_0x4b9e[11]]()},50)}else{loginError[_0x4b9e[8]][_0x4b9e[9]]=""}};usernameInput[_0x4b9e[12]](_0x4b9e[13],function(e){if(e[_0x4b9e[14]]===_0x4b9e[15])passwordInput[_0x4b9e[11]]()});passwordInput[_0x4b9e[12]](_0x4b9e[13],function(e){if(e[_0x4b9e[14]]===_0x4b9e[15])loginBtn.click()});var terminalLines=["+---------------------------------------------------+","|                                                   |","|             ERROR TERMINAL INTERFACE              |","|                                                   |","+---------------------------------------------------+","|   Access granted. Welcome, User.                  |","|                                                   |","|   Type \"help\" for commands.                       |","|                                                   |","|   error@system:~$                                 |","+---------------------------------------------------+"];function updateTerminal(linesArr){terminalAscii[_0x4b9e[20]]=linesArr[_0x4b9e[19]]("\n")}function padLine(content){var pad=47-content[_0x4b9e[16]];return"|   "+content+Array(Math.max(0,pad)+1)[_0x4b9e[19]](" ")+"|"}function printToTerminal(str){terminalLines[_0x4b9e[24]](-2,2);str[_0x4b9e[19]]("\n")[_0x4b9e[18]](function(line){terminalLines[_0x4b9e[17]](padLine(line))});terminalLines[_0x4b9e[17]](padLine("error@system:~$"));terminalLines[_0x4b9e[17]]("+---------------------------------------------------+");updateTerminal(terminalLines)}function clearTerminal(){terminalLines=["+---------------------------------------------------+","|                                                   |","|             ERROR TERMINAL INTERFACE              |","|                                                   |","+---------------------------------------------------+",padLine("Access granted. Welcome, User."),padLine(""),padLine('Type "help" for commands.'),padLine(""),padLine('error@system:~$'),"+---------------------------------------------------+"];updateTerminal(terminalLines)}var adminUnlocked=false,systemLogHintShown=false;terminalInput[_0x4b9e[12]](_0x4b9e[13],function(e){if(e[_0x4b9e[14]]===_0x4b9e[15]){var cmd=terminalInput[_0x4b9e[5]][_0x4b9e[6]]();if(cmd!==""){printToTerminal("error@system:~$ "+cmd);handleCommand(cmd)}else{printToTerminal("error@system:~$")}terminalInput[_0x4b9e[5]]=""}});terminalSection[_0x4b9e[12]]("click",function(){terminalInput[_0x4b9e[11]]()});terminalInput[_0x4b9e[12]]("blur",function(){setTimeout(function(){terminalInput[_0x4b9e[11]]()},50)});function handleCommand(cmd){var output="";if(cmd==="help"){output=["Available commands:","  help        - Show this help","  about       - Info","  clear       - Clear the terminal","  echo X      - Print X","  time        - Show current time","  whoami      - Display user info","  Protocal    - Restricted command","  system log  - System log access","  yt          - More info",];if(adminUnlocked){output.push("  status      - Admin system status");output.push("  shutdown    - Admin shutdown sequence")}output=output.join("\n")}else if(cmd==="about"){output=["Error Terminal Interface.","All activity is monitored and logged."]["join"]("\n")}else if(cmd==="clear"){clearTerminal();return}else if(cmd.startsWith("echo ")){output=cmd.slice(5)}else if(cmd==="time"){output="Current system time: "+new Date()["toLocaleString"]()}else if(cmd==="whoami"){output="User: User\nAccess: Standard"}else if(cmd==="yt"){output="For more, visit the YouTube channel: @imBlastra"}else if(cmd==="system log"){if(!systemLogHintShown){output=["--- SYSTEM LOG ---","2025-05-24 17:51:01 LOGIN User OK","2025-05-24 17:52:31 WARNING: Unusual activity detected.","2025-05-24 17:53:11 [SECURITY] Protocal code issued: <error-9527Q>","2025-05-24 17:53:12 System: Monitoring...","-------------------"].join("\n");systemLogHintShown=true}else{output=["--- SYSTEM LOG ---","No new events.","2025-05-24 17:53:11 [SECURITY] Protocal code issued: <error-9527Q>","-------------------"].join("\n")}}else if(cmd.startsWith("Protocal")){var parts=cmd.split(" ");if(adminUnlocked){output="[redacted] clearance already active.\nSystem privileges elevated."}else if(parts.length===2&&parts[1]===admincode){adminUnlocked=true;output=["Protocal code accepted.","Admin override enabled.","Extra commands unlocked: status, shutdown","","[REDACTED] ACCESS LOG:","Subject: [redacted]","Status: Activity detected","Note: Further information available in system logs.","Flag: error-override"].join("\n")}else{output="Access denied. Admin code required.\nUsage: Protocal [code]"}}else if(adminUnlocked&&cmd==="status"){output=["SYSTEM STATUS:","  All modules: ONLINE","  Security: NOMINAL","  [REDACTED] surveillance: ACTIVE","  Last override: "+new Date()["toLocaleString"]()].join("\n")}else if(adminUnlocked&&cmd==="shutdown"){output=["Initiating shutdown sequence...","Saving logs.","Disconnecting...","Session terminated."].join("\n");setTimeout(function(){clearTerminal();printToTerminal("System offline.")},1500)}else{output="Command not found. Type \"help\" for commands."}printToTerminal(output)}
-})();
+    // The admin code is encoded in base64 so it's not visible as plain text in the code.
+    function decodeBase64(s) {
+      try {
+        return atob(s);
+      } catch {
+        // Fallback for very old browsers:
+        return window.atob ? window.atob(s) : s;
+      }
+    }
+    const ADMIN_CODE = decodeBase64("ZXJyb3ItOTUyN1E="); // 'error-9527Q'
+    let adminUnlocked = false;
+    let systemLogHintShown = false;
+
+    // LOGIN LOGIC
+    const loginBtn = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const loginSection = document.getElementById('login-section');
+    const terminalSection = document.getElementById('terminal-section');
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalAscii = document.getElementById('terminal-ascii');
+
+    usernameInput.focus();
+
+    loginBtn.onclick = function () {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+      if (username === 'User' && password === 'External') {
+        loginSection.style.display = 'none';
+        terminalSection.style.display = '';
+        setTimeout(() => terminalInput.focus(), 50);
+      } else {
+        loginError.style.display = 'block';
+      }
+    };
+    usernameInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') passwordInput.focus();
+    });
+    passwordInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+
+    // TERMINAL LOGIC
+    let terminalLines = [
+      "+---------------------------------------------------+",
+      "|                                                   |",
+      "|             ERROR TERMINAL INTERFACE              |",
+      "|                                                   |",
+      "+---------------------------------------------------+",
+      "|   Access granted. Welcome, User.                  |",
+      "|                                                   |",
+      "|   Type \"help\" for commands.                       |",
+      "|                                                   |",
+      "|   error@system:~$                                 |",
+      "+---------------------------------------------------+"
+    ];
+    function updateTerminal(linesArr) {
+      terminalAscii.textContent = linesArr.join('\n');
+    }
+    function padLine(content) {
+      const pad = 47 - content.length;
+      return "|   " + content + ' '.repeat(Math.max(0,pad)) + "|";
+    }
+    function printToTerminal(str) {
+      terminalLines.splice(-2,2);
+      str.split('\n').forEach(line => {
+        terminalLines.push(padLine(line));
+      });
+      terminalLines.push(padLine('error@system:~$'));
+      terminalLines.push("+---------------------------------------------------+");
+      updateTerminal(terminalLines);
+    }
+    function clearTerminal() {
+      terminalLines = [
+        "+---------------------------------------------------+",
+        "|                                                   |",
+        "|             ERROR TERMINAL INTERFACE              |",
+        "|                                                   |",
+        "+---------------------------------------------------+",
+        padLine("Access granted. Welcome, User."),
+        padLine(""),
+        padLine('Type "help" for commands.'),
+        padLine(""),
+        padLine('error@system:~$'),
+        "+---------------------------------------------------+"
+      ];
+      updateTerminal(terminalLines);
+    }
+    terminalInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const cmd = terminalInput.value.trim();
+        if (cmd !== "") {
+          printToTerminal('error@system:~$ ' + cmd);
+          handleCommand(cmd);
+        } else {
+          printToTerminal('error@system:~$');
+        }
+        terminalInput.value = "";
+      }
+    });
+    terminalSection.addEventListener('click', () => terminalInput.focus());
+    terminalInput.addEventListener('blur', () => setTimeout(() => terminalInput.focus(), 50));
+
+    function handleCommand(cmd) {
+      let output = '';
+      if (cmd === 'help') {
+        output = [
+          'Available commands:',
+          '  help        - Show this help',
+          '  about       - Info',
+          '  clear       - Clear the terminal',
+          '  echo X      - Print X',
+          '  time        - Show current time',
+          '  whoami      - Display user info',
+          '  Protocal    - Restricted command',
+          '  system log  - System log access',
+          '  yt          - More info',
+        ];
+        if (adminUnlocked) {
+          output.push('  status      - Admin system status');
+          output.push('  shutdown    - Admin shutdown sequence');
+        }
+        output = output.join('\n');
+      } else if (cmd === 'about') {
+        output = [
+          'Error Terminal Interface.',
+          'All activity is monitored and logged.'
+        ].join('\n');
+      } else if (cmd === 'clear') {
+        clearTerminal();
+        return;
+      } else if (cmd.startsWith('echo ')) {
+        output = cmd.slice(5);
+      } else if (cmd === 'time') {
+        output = 'Current system time: ' + new Date().toLocaleString();
+      } else if (cmd === 'whoami') {
+        output = 'User: User\nAccess: Standard';
+      } else if (cmd === 'yt') {
+        output = 'For more, visit the YouTube channel: @imBlastra';
+      } else if (cmd === 'system log') {
+        if (!systemLogHintShown) {
+          output = [
+            '--- SYSTEM LOG ---',
+            '2025-05-24 17:51:01 LOGIN User OK',
+            '2025-05-24 17:52:31 WARNING: Unusual activity detected.',
+            `2025-05-24 17:53:11 [SECURITY] Protocal code issued: <${ADMIN_CODE}>`,
+            '2025-05-24 17:53:12 System: Monitoring...',
+            '-------------------'
+          ].join('\n');
+          systemLogHintShown = true;
+        } else {
+          output = [
+            '--- SYSTEM LOG ---',
+            'No new events.',
+            `2025-05-24 17:53:11 [SECURITY] Protocal code issued: <${ADMIN_CODE}>`,
+            '-------------------'
+          ].join('\n');
+        }
+      } else if (cmd.startsWith('Protocal')) {
+        const parts = cmd.split(' ');
+        if (adminUnlocked) {
+          output = '[redacted] clearance already active.\nSystem privileges elevated.';
+        } else if (parts.length === 2 && parts[1] === ADMIN_CODE) {
+          adminUnlocked = true;
+          output = [
+            'Protocal code accepted.',
+            'Admin override enabled.',
+            'Extra commands unlocked: status, shutdown',
+            '',
+            '[REDACTED] ACCESS LOG:',
+            'Subject: [redacted]',
+            'Status: Activity detected',
+            'Note: Further information available in system logs.',
+            'Flag: error-override',
+          ].join('\n');
+        } else {
+          output = 'Access denied. Admin code required.\nUsage: Protocal [code]';
+        }
+      } else if (adminUnlocked && cmd === 'status') {
+        output = [
+          'SYSTEM STATUS:',
+          '  All modules: ONLINE',
+          '  Security: NOMINAL',
+          '  [REDACTED] surveillance: ACTIVE',
+          '  Last override: ' + new Date().toLocaleString(),
+        ].join('\n');
+      } else if (adminUnlocked && cmd === 'shutdown') {
+        output = [
+          'Initiating shutdown sequence...',
+          'Saving logs.',
+          'Disconnecting...',
+          'Session terminated.'
+        ].join('\n');
+        setTimeout(() => {
+          clearTerminal();
+          printToTerminal('System offline.');
+        }, 1500);
+      } else {
+        output = 'Command not found. Type "help" for commands.';
+      }
+      printToTerminal(output);
+    }
   </script>
 </body>
 </html>

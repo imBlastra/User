@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ChronoCore // Liminal Breach</title>
+  <style>
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: 'Fira Mono', monospace;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .center-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .ascii-container {
+      position: relative;
+      width: 560px;
+      min-height: 350px;
+      max-width: 98vw;
+    }
+    .ascii-art {
+      white-space: pre;
+      font-size: 1.08em;
+      pointer-events: none;
+      letter-spacing: 0.5px;
+    }
+    .error-message {
+      color: #f00;
+      font-size: 1em;
+      margin-top: 18px;
+      text-align: center;
+      font-family: inherit;
+      letter-spacing: 1px;
+    }
+    .subtext {
+      color: #0ff;
+      font-size: 0.98em;
+      margin-top: 8px;
+      text-align: center;
+      font-family: inherit;
+    }
+    .glitch {
+      animation: glitch 1.2s infinite linear alternate-reverse;
+      text-shadow: 2px 0 #0ff, -2px 0 #f0f, 0 2px #ff0;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 #0ff, -2px 0 #f0f, 0 2px #ff0; }
+      20% { text-shadow: -2px 0 #0ff, 2px 0 #f0f, 0 -2px #ff0; }
+      40% { text-shadow: 2px 2px #0ff, -2px -2px #f0f, 2px 0 #ff0; }
+      60% { text-shadow: -2px 2px #0ff, 2px -2px #f0f, -2px 0 #ff0; }
+      80% { text-shadow: 0 2px #0ff, 0 -2px #f0f, 0 2px #ff0; }
+      100% { text-shadow: 2px -2px #0ff, -2px 2px #f0f, 0 0 #ff0; }
+    }
+    a {
+      color: #0ff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="center-box">
+    <div class="ascii-container">
+      <pre class="ascii-art glitch">
++------------------------------------------------------+
+|                                                      |
+|   _______   ___   _______   ___   _______            |
+|  |  ___  | |  |  |  ___  | |  |  |  ___  |           |
+|  | |404| | |  |  | |404| | |  |  | |404| |           |
+|  | |___| | |__|  | |___| | |__|  | |___| |           |
+|                                                      |
+|      LIMINAL BREACH DETECTED  //  CODE: 404          |
++------------------------------------------------------+
+      </pre>
+      <div class="error-message">
+        //SystemLog// ChronoCore<br>
+        Division: Temporal, Nuclear, AGI<br>
+        Subject: [REDACTED]<br>
+        Incident: Location Not Found<br><br>
+        <span class="glitch">Filepath does not exist. <br>
+        <span style="color:#ff0;">Possible spatial displacement or liminal incursion.</span><br>
+        <span style="color:#0ff;">Async protocol failed to recover environment.</span><br>
+        End of corridor. Return not possible.<br>
+        <br>
+        es quise dormit
+        </span>
+      </div>
+      <div class="subtext">
+        <a href="/">Return to Portal</a> &nbsp;|&nbsp; <a href="#" onclick="window.history.back()">Go Back</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

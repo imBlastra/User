@@ -82,6 +82,10 @@
       padding: 1px 4px;
       box-sizing: border-box;
     }
+    a {
+      color: #0ff;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -135,9 +139,10 @@
     </div>
   </div>
   <script>
-    // --- ADMIN CODE HIDDEN IN SOURCE ---
-    // Protocal admin code: error-9527Q
+    // The admin code is revealed only by 'system log'
     const ADMIN_CODE = "error-9527Q";
+    let adminUnlocked = false;
+    let systemLogHintShown = false;
 
     // LOGIN LOGIC
     const loginBtn = document.getElementById('login-btn');
@@ -170,7 +175,6 @@
     });
 
     // TERMINAL LOGIC
-    let adminUnlocked = false;
     let terminalLines = [
       "+---------------------------------------------------+",
       "|                                                   |",
@@ -245,6 +249,8 @@
           '  time        - Show current time',
           '  whoami      - Display user info',
           '  Protocal    - Restricted command',
+          '  system log  - System log access',
+          '  yt          - More info',
         ];
         if (adminUnlocked) {
           output.push('  status      - Admin system status');
@@ -265,6 +271,27 @@
         output = 'Current system time: ' + new Date().toLocaleString();
       } else if (cmd === 'whoami') {
         output = 'User: User\nAccess: Standard';
+      } else if (cmd === 'yt') {
+        output = 'For more, visit the YouTube channel: @imBlastra';
+      } else if (cmd === 'system log') {
+        if (!systemLogHintShown) {
+          output = [
+            '--- SYSTEM LOG ---',
+            '2025-05-24 17:51:01 LOGIN User OK',
+            '2025-05-24 17:52:31 WARNING: Unusual activity detected.',
+            '2025-05-24 17:53:11 [SECURITY] Protocal code issued: <error-9527Q>',
+            '2025-05-24 17:53:12 System: Monitoring...',
+            '-------------------'
+          ].join('\n');
+          systemLogHintShown = true;
+        } else {
+          output = [
+            '--- SYSTEM LOG ---',
+            'No new events.',
+            '2025-05-24 17:53:11 [SECURITY] Protocal code issued: <error-9527Q>',
+            '-------------------'
+          ].join('\n');
+        }
       } else if (cmd.startsWith('Protocal')) {
         const parts = cmd.split(' ');
         if (adminUnlocked) {

@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ExternalUser ARG Terminal</title>
+  <title>NewUser ARG Terminal</title>
   <style>
     body {
-      background: #111;
+      background: #000;
       color: #0f0;
       font-family: 'Fira Mono', 'Consolas', monospace;
-      height: 100vh;
       margin: 0;
-      padding: 0;
+      height: 100vh;
+      overflow: hidden;
     }
     .center-box {
       display: flex;
@@ -19,126 +19,184 @@
       align-items: center;
       height: 100vh;
     }
-    .terminal {
-      background: #222;
-      border-radius: 8px;
-      padding: 32px;
-      box-shadow: 0 0 30px #000a;
-      width: 400px;
-      max-width: 90vw;
+    .ascii-box {
+      background: transparent;
+      color: #0f0;
+      padding: 0;
+      width: 520px;
+      max-width: 98vw;
+      min-height: 230px;
+      white-space: pre;
+      font-size: 1.05em;
     }
     input, button {
-      background: #111;
+      background: #000;
       color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 2px;
-      padding: 8px;
-      margin-top: 8px;
+      border: none;
+      border-bottom: 1px solid #0f0;
+      padding: 0 4px;
       font-size: 1em;
       font-family: inherit;
       outline: none;
+      margin-right: 8px;
     }
     button {
+      color: #0ff;
       cursor: pointer;
+      border: none;
+      background: transparent;
     }
     .hidden {
       display: none;
     }
-    .terminal-content {
-      white-space: pre-wrap;
-      margin-top: 1em;
+    .ascii-error {
+      color: #f00;
     }
-    .prompt {
-      color: #0ff;
-    }
-    .output {
-      color: #0f0;
-    }
+    ::selection { background: #0f08; }
   </style>
 </head>
 <body>
   <div class="center-box">
-    <div class="terminal" id="login-section">
-      <h2>ExternalUser Terminal Login</h2>
-      <form id="login-form">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" autocomplete="off" autofocus><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password"><br>
-        <button type="submit">Login</button>
-      </form>
-      <div id="login-error" style="color: #f00; margin-top:8px; display:none;">Incorrect. Try again.</div>
+    <div class="ascii-box" id="login-section">
++---------------------------------------------------+
+|                                                   |
+|      ________              __                     |
+|     |  ____  |  _______   |  |    ______          |
+|     | |    | | |  ___  |  |  |   /  __  \         |
+|     | |    | | | |   | |  |  |  |  |  |  |        |
+|     | |____| | | |___| |  |  |  |  |__|  |        |
+|     |________| |_______|  |__|   \______/         |
+|                                                   |
+|           NEWUSER :: ACCESS PORTAL                |
+|                                                   |
++---------------------------------------------------+
+|   Username: [            ]                        |
+|   Password: [            ]                        |
+|                                                   |
+|   [ Login ]                                       |
+|                                                   |
++---------------------------------------------------+
+<span id="login-error" class="ascii-error hidden">|   Incorrect. Try again.                          |</span>
     </div>
-    <div class="terminal hidden" id="terminal-section">
-      <div class="terminal-content" id="terminal-content">
-        <span class="output">Access granted. Welcome, ExternalUser.</span><br>
-        <span class="prompt">externaluser@arg:~$</span>
-      </div>
-      <form id="terminal-form" autocomplete="off" style="margin-top:4px;">
-        <span class="prompt">externaluser@arg:~$</span>
-        <input type="text" id="terminal-input" style="width: 70%;" autofocus>
-      </form>
+    <div class="ascii-box hidden" id="terminal-section">
++---------------------------------------------------+
+|                                                   |
+|             NEWUSER TERMINAL INTERFACE            |
+|                                                   |
++---------------------------------------------------+
+<span id="terminal-content">
+|   Access granted. Welcome, NewUser.               |
+|                                                   |
+|   Type "help" for commands.                       |
+|                                                   |
+|   newuser@arg:~$                                  |
+</span>
     </div>
   </div>
   <script>
-    // Login Logic
-    const loginForm = document.getElementById('login-form');
+    // ASCII art box templates
+    const loginBoxTop = `+---------------------------------------------------+
+|                                                   |
+|      ________              __                     |
+|     |  ____  |  _______   |  |    ______          |
+|     | |    | | |  ___  |  |  |   /  __  \\         |
+|     | |    | | | |   | |  |  |  |  |  |  |        |
+|     | |____| | | |___| |  |  |  |  |__|  |        |
+|     |________| |_______|  |__|   \\______/         |
+|                                                   |
+|           NEWUSER :: ACCESS PORTAL                |
+|                                                   |
++---------------------------------------------------+`;
+
+    const loginBoxBottom = `+---------------------------------------------------+`;
+
+    function drawLoginBox(showError) {
+      // Use ASCII-style input fields
+      let errorLine = showError
+        ? '|   Incorrect. Try again.                          |'
+        : '                                                    ';
+      return `
+${loginBoxTop}
+|   Username: [<input id="username" type="text" maxlength="16" autocomplete="off" style="width:80px;">]                        |
+|   Password: [<input id="password" type="password" maxlength="16" style="width:80px;">]                        |
+|                                                   |
+|   <button id="login-btn">Login</button>                                       |
+|                                                   |
+${loginBoxBottom}
+${showError ? `<span class="ascii-error">|   Incorrect. Try again.                          |</span>` : ''}
+      `;
+    }
+
+    // Initial login form rendering
     const loginSection = document.getElementById('login-section');
-    const terminalSection = document.getElementById('terminal-section');
-    const loginError = document.getElementById('login-error');
+    loginSection.innerHTML = drawLoginBox(false);
 
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
+    // Attach login event handler after render
+    function attachLoginHandler() {
+      const loginBtn = document.getElementById('login-btn');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      usernameInput.focus();
 
-      if (username === 'User' && password === 'External') {
-        loginSection.classList.add('hidden');
-        terminalSection.classList.remove('hidden');
-        document.getElementById('terminal-input').focus();
-      } else {
-        loginError.style.display = 'block';
-      }
-    });
-
-    // Terminal Logic
-    const terminalContent = document.getElementById('terminal-content');
-    const terminalForm = document.getElementById('terminal-form');
-    const terminalInput = document.getElementById('terminal-input');
-
-    terminalForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const command = terminalInput.value;
-      if(command.trim() !== '') {
-        terminalContent.innerHTML += `<br><span class="prompt">externaluser@arg:~$</span> ${command}`;
-        // Simple fake output for now
-        let output = '';
-        switch(command.trim()) {
-          case 'help':
-            output = 'Available commands: help, about, clear, echo [text]';
-            break;
-          case 'about':
-            output = 'This is the ExternalUser ARG terminal. Discover the secrets!';
-            break;
-          case 'clear':
-            terminalContent.innerHTML = `<span class="output">Access granted. Welcome, ExternalUser.</span><br><span class="prompt">externaluser@arg:~$</span>`;
-            terminalInput.value = '';
-            return;
-          default:
-            if (command.startsWith('echo ')) {
-              output = command.slice(5);
-            } else {
-              output = 'Command not found. Type "help" for a list of commands.';
-            }
+      loginBtn.onclick = function() {
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        if (username === 'User' && password === 'External') {
+          loginSection.classList.add('hidden');
+          terminalSection.classList.remove('hidden');
+          scrollTerminal();
+          setTimeout(() => terminalInput.focus(), 10);
+        } else {
+          loginSection.innerHTML = drawLoginBox(true);
+          attachLoginHandler();
         }
-        terminalContent.innerHTML += `<br><span class="output">${output}</span>`;
-        terminalContent.scrollTop = terminalContent.scrollHeight;
-      }
-      terminalInput.value = '';
-    });
+      };
+      passwordInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') loginBtn.click();
+      });
+      usernameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') passwordInput.focus();
+      });
+    }
+    attachLoginHandler();
 
-    // Focus input after clearing
-    terminalInput.addEventListener('blur', () => terminalInput.focus());
-  </script>
-</body>
-</html>
+    // Terminal logic
+    const terminalSection = document.getElementById('terminal-section');
+    const terminalContent = document.getElementById('terminal-content');
+    // Add input line
+    let inputLine = document.createElement('input');
+    inputLine.type = 'text';
+    inputLine.id = 'terminal-input';
+    inputLine.spellcheck = false;
+    inputLine.style.background = 'transparent';
+    inputLine.style.color = '#0f0';
+    inputLine.style.border = 'none';
+    inputLine.style.fontFamily = 'inherit';
+    inputLine.style.fontSize = 'inherit';
+    inputLine.style.width = '320px';
+    inputLine.style.outline = 'none';
+    inputLine.autocomplete = 'off';
+
+    terminalSection.appendChild(inputLine);
+
+    function scrollTerminal() {
+      terminalSection.scrollTop = terminalSection.scrollHeight;
+    }
+
+    function printToTerminal(str) {
+      // Each line gets a '|   ...   |' ASCII border
+      str.split('\n').forEach(line => {
+        let pad = 47 - line.length;
+        if (pad < 0) pad = 0;
+        terminalContent.innerHTML += "\n|   " + line + ' '.repeat(pad) + "|";
+      });
+      scrollTerminal();
+    }
+
+    function printPrompt() {
+      printToTerminal('newuser@arg:~$');
+    }
+
+    inputLine.addEventListener('keydown', function(e) {
+      if (e`
+

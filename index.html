@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Terminal</title>
+  <title>Error Terminal</title>
   <style>
     body {
       background: #000;
@@ -27,7 +27,7 @@
     .ascii-art {
       white-space: pre;
       font-size: 1.05em;
-      pointer-events: none; /* allows clicks to pass through, except on inputs */
+      pointer-events: none;
     }
     .ascii-input {
       position: absolute;
@@ -98,7 +98,7 @@
 |     | |____| | | |___| |  |  |  |  |__|  |        |
 |     |________| |_______|  |__|   \______/         |
 |                                                   |
-|           NEWUSER :: ACCESS PORTAL                |
+|           ERROR :: ACCESS PORTAL                   |
 |                                                   |
 +---------------------------------------------------+
 |   Username: [            ]                        |
@@ -121,20 +121,24 @@
       <pre class="ascii-art" id="terminal-ascii">
 +---------------------------------------------------+
 |                                                   |
-|             NEWUSER TERMINAL INTERFACE            |
+|             ERROR TERMINAL INTERFACE              |
 |                                                   |
 +---------------------------------------------------+
-|   Access granted. Welcome, NewUser.               |
+|   Access granted. Welcome, User.                  |
 |                                                   |
 |   Type "help" for commands.                       |
 |                                                   |
-|   newuser@arg:~$                                  |
+|   error@system:~$                                 |
 +---------------------------------------------------+
       </pre>
       <input class="terminal-input" id="terminal-input" type="text" autocomplete="off" spellcheck="false">
     </div>
   </div>
   <script>
+    // --- ADMIN CODE HIDDEN IN SOURCE ---
+    // Protocal admin code: error-9527Q
+    const ADMIN_CODE = "error-9527Q";
+
     // LOGIN LOGIC
     const loginBtn = document.getElementById('login-btn');
     const loginError = document.getElementById('login-error');
@@ -166,17 +170,18 @@
     });
 
     // TERMINAL LOGIC
+    let adminUnlocked = false;
     let terminalLines = [
       "+---------------------------------------------------+",
       "|                                                   |",
-      "|             NEWUSER TERMINAL INTERFACE            |",
+      "|             ERROR TERMINAL INTERFACE              |",
       "|                                                   |",
       "+---------------------------------------------------+",
-      "|   Access granted. Welcome, NewUser.               |",
+      "|   Access granted. Welcome, User.                  |",
       "|                                                   |",
       "|   Type \"help\" for commands.                       |",
       "|                                                   |",
-      "|   uusseerr@error:~$                                  |",
+      "|   error@system:~$                                 |",
       "+---------------------------------------------------+"
     ];
     function updateTerminal(linesArr) {
@@ -193,7 +198,7 @@
         terminalLines.push(padLine(line));
       });
       // Add prompt and box bottom
-      terminalLines.push(padLine('uusseerr@error:~$'));
+      terminalLines.push(padLine('error@system:~$'));
       terminalLines.push("+---------------------------------------------------+");
       updateTerminal(terminalLines);
     }
@@ -201,14 +206,14 @@
       terminalLines = [
         "+---------------------------------------------------+",
         "|                                                   |",
-        "|             NEWUSER TERMINAL INTERFACE            |",
+        "|             ERROR TERMINAL INTERFACE              |",
         "|                                                   |",
         "+---------------------------------------------------+",
-        padLine("Access granted. Welcome, NewUser."),
+        padLine("Access granted. Welcome, User."),
         padLine(""),
         padLine('Type "help" for commands.'),
         padLine(""),
-        padLine('uusseerr@error:~$'),
+        padLine('error@system:~$'),
         "+---------------------------------------------------+"
       ];
       updateTerminal(terminalLines);
@@ -217,45 +222,93 @@
       if (e.key === 'Enter') {
         const cmd = terminalInput.value.trim();
         if (cmd !== "") {
-          printToTerminal('newuser@arg:~$ ' + cmd);
-          // Command responses
-          let output = '';
-          switch(cmd) {
-            case 'help':
-              output = [
-                'Available commands:',
-                '  help    - Show this help',
-                '  about   - What is this?',
-                '  clear   - Clear the terminal',
-                '  echo X  - Print X'
-              ].join('\n');
-              break;
-            case 'about':
-              output = [
-                'This is an ARG Terminal for NewUser.',
-                'Find the hidden clues. Good luck!'
-              ].join('\n');
-              break;
-            case 'clear':
-              clearTerminal();
-              terminalInput.value = "";
-              return;
-            default:
-              if (cmd.startsWith('echo ')) {
-                output = cmd.slice(5);
-              } else {
-                output = 'Command not found. Type "help" for commands.';
-              }
-          }
-          printToTerminal(output);
+          printToTerminal('error@system:~$ ' + cmd);
+          handleCommand(cmd);
         } else {
-          printToTerminal('newuser@arg:~$');
+          printToTerminal('error@system:~$');
         }
         terminalInput.value = "";
       }
     });
     terminalSection.addEventListener('click', () => terminalInput.focus());
     terminalInput.addEventListener('blur', () => setTimeout(() => terminalInput.focus(), 50));
+
+    function handleCommand(cmd) {
+      let output = '';
+      if (cmd === 'help') {
+        output = [
+          'Available commands:',
+          '  help        - Show this help',
+          '  about       - Info',
+          '  clear       - Clear the terminal',
+          '  echo X      - Print X',
+          '  time        - Show current time',
+          '  whoami      - Display user info',
+          '  Protocal    - Restricted command',
+        ];
+        if (adminUnlocked) {
+          output.push('  status      - Admin system status');
+          output.push('  shutdown    - Admin shutdown sequence');
+        }
+        output = output.join('\n');
+      } else if (cmd === 'about') {
+        output = [
+          'Error Terminal Interface.',
+          'All activity is monitored and logged.'
+        ].join('\n');
+      } else if (cmd === 'clear') {
+        clearTerminal();
+        return;
+      } else if (cmd.startsWith('echo ')) {
+        output = cmd.slice(5);
+      } else if (cmd === 'time') {
+        output = 'Current system time: ' + new Date().toLocaleString();
+      } else if (cmd === 'whoami') {
+        output = 'User: User\nAccess: Standard';
+      } else if (cmd.startsWith('Protocal')) {
+        const parts = cmd.split(' ');
+        if (adminUnlocked) {
+          output = '[redacted] clearance already active.\nSystem privileges elevated.';
+        } else if (parts.length === 2 && parts[1] === ADMIN_CODE) {
+          adminUnlocked = true;
+          output = [
+            'Protocal code accepted.',
+            'Admin override enabled.',
+            'Extra commands unlocked: status, shutdown',
+            '',
+            '[REDACTED] ACCESS LOG:',
+            'Subject: [redacted]',
+            'Status: Activity detected',
+            'Note: Further information available in system logs.',
+            'Flag: error-override',
+          ].join('\n');
+        } else {
+          output = 'Access denied. Admin code required.\nUsage: Protocal [code]';
+        }
+      } else if (adminUnlocked && cmd === 'status') {
+        output = [
+          'SYSTEM STATUS:',
+          '  All modules: ONLINE',
+          '  Security: NOMINAL',
+          '  [REDACTED] surveillance: ACTIVE',
+          '  Last override: ' + new Date().toLocaleString(),
+        ].join('\n');
+      } else if (adminUnlocked && cmd === 'shutdown') {
+        output = [
+          'Initiating shutdown sequence...',
+          'Saving logs.',
+          'Disconnecting...',
+          'Session terminated.'
+        ].join('\n');
+        setTimeout(() => {
+          clearTerminal();
+          printToTerminal('System offline.');
+        }, 1500);
+      } else {
+        output = 'Command not found. Type "help" for commands.';
+      }
+      printToTerminal(output);
+    }
   </script>
 </body>
 </html>

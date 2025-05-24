@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>NewUser ARG Terminal</title>
+  <title>Terminal</title>
   <style>
     body {
       background: #000;
@@ -14,50 +14,81 @@
     }
     .center-box {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    .ascii-box {
-      background: transparent;
-      color: #0f0;
-      padding: 0;
+    .ascii-container {
+      position: relative;
       width: 520px;
-      max-width: 98vw;
-      min-height: 230px;
+      min-height: 320px;
+      max-width: 96vw;
+    }
+    .ascii-art {
       white-space: pre;
       font-size: 1.05em;
+      pointer-events: none; /* allows clicks to pass through, except on inputs */
     }
-    input, button {
+    .ascii-input {
+      position: absolute;
       background: #000;
       color: #0f0;
       border: none;
       border-bottom: 1px solid #0f0;
-      padding: 0 4px;
-      font-size: 1em;
       font-family: inherit;
+      font-size: 1em;
       outline: none;
-      margin-right: 8px;
+      width: 130px;
+      z-index: 2;
+      padding: 1px 4px;
+      box-sizing: border-box;
     }
-    button {
-      color: #0ff;
-      cursor: pointer;
-      border: none;
+    .ascii-btn {
+      position: absolute;
       background: transparent;
-    }
-    .hidden {
-      display: none;
+      color: #0ff;
+      border: none;
+      font-family: inherit;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 2;
+      left: 85px;
+      top: 230px;
+      width: 70px;
+      height: 22px;
     }
     .ascii-error {
+      position: absolute;
+      left: 28px;
+      top: 255px;
       color: #f00;
+      background: #000;
+      font-size: 0.97em;
+      z-index: 2;
     }
-    ::selection { background: #0f08; }
+    .terminal-input {
+      position: absolute;
+      left: 160px;
+      top: 225px;
+      background: #000;
+      color: #0f0;
+      border: none;
+      border-bottom: 1px solid #0f0;
+      font-family: inherit;
+      font-size: 1em;
+      outline: none;
+      width: 260px;
+      z-index: 2;
+      padding: 1px 4px;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
   <div class="center-box">
-    <div class="ascii-box" id="login-section">
+    <!-- LOGIN SCREEN -->
+    <div class="ascii-container" id="login-section">
+      <pre class="ascii-art" id="login-ascii">
 +---------------------------------------------------+
 |                                                   |
 |      ________              __                     |
@@ -76,127 +107,155 @@
 |   [ Login ]                                       |
 |                                                   |
 +---------------------------------------------------+
-<span id="login-error" class="ascii-error hidden">|   Incorrect. Try again.                          |</span>
+      </pre>
+      <input class="ascii-input" id="username" type="text" autocomplete="off"
+        maxlength="16" style="top: 195px; left: 150px;" placeholder="Username">
+      <input class="ascii-input" id="password" type="password"
+        maxlength="16" style="top: 220px; left: 150px;" placeholder="Password">
+      <button class="ascii-btn" id="login-btn" type="button">Login</button>
+      <div class="ascii-error" id="login-error" style="display:none;">Incorrect. Try again.</div>
     </div>
-    <div class="ascii-box hidden" id="terminal-section">
+
+    <!-- TERMINAL SCREEN -->
+    <div class="ascii-container" id="terminal-section" style="display:none;">
+      <pre class="ascii-art" id="terminal-ascii">
 +---------------------------------------------------+
 |                                                   |
 |             NEWUSER TERMINAL INTERFACE            |
 |                                                   |
 +---------------------------------------------------+
-<span id="terminal-content">
 |   Access granted. Welcome, NewUser.               |
 |                                                   |
 |   Type "help" for commands.                       |
 |                                                   |
 |   newuser@arg:~$                                  |
-</span>
++---------------------------------------------------+
+      </pre>
+      <input class="terminal-input" id="terminal-input" type="text" autocomplete="off" spellcheck="false">
     </div>
   </div>
   <script>
-    // ASCII art box templates
-    const loginBoxTop = `+---------------------------------------------------+
-|                                                   |
-|      ________              __                     |
-|     |  ____  |  _______   |  |    ______          |
-|     | |    | | |  ___  |  |  |   /  __  \\         |
-|     | |    | | | |   | |  |  |  |  |  |  |        |
-|     | |____| | | |___| |  |  |  |  |__|  |        |
-|     |________| |_______|  |__|   \\______/         |
-|                                                   |
-|           NEWUSER :: ACCESS PORTAL                |
-|                                                   |
-+---------------------------------------------------+`;
-
-    const loginBoxBottom = `+---------------------------------------------------+`;
-
-    function drawLoginBox(showError) {
-      // Use ASCII-style input fields
-      let errorLine = showError
-        ? '|   Incorrect. Try again.                          |'
-        : '                                                    ';
-      return `
-${loginBoxTop}
-|   Username: [<input id="username" type="text" maxlength="16" autocomplete="off" style="width:80px;">]                        |
-|   Password: [<input id="password" type="password" maxlength="16" style="width:80px;">]                        |
-|                                                   |
-|   <button id="login-btn">Login</button>                                       |
-|                                                   |
-${loginBoxBottom}
-${showError ? `<span class="ascii-error">|   Incorrect. Try again.                          |</span>` : ''}
-      `;
-    }
-
-    // Initial login form rendering
+    // LOGIN LOGIC
+    const loginBtn = document.getElementById('login-btn');
+    const loginError = document.getElementById('login-error');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
     const loginSection = document.getElementById('login-section');
-    loginSection.innerHTML = drawLoginBox(false);
-
-    // Attach login event handler after render
-    function attachLoginHandler() {
-      const loginBtn = document.getElementById('login-btn');
-      const usernameInput = document.getElementById('username');
-      const passwordInput = document.getElementById('password');
-      usernameInput.focus();
-
-      loginBtn.onclick = function() {
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-        if (username === 'User' && password === 'External') {
-          loginSection.classList.add('hidden');
-          terminalSection.classList.remove('hidden');
-          scrollTerminal();
-          setTimeout(() => terminalInput.focus(), 10);
-        } else {
-          loginSection.innerHTML = drawLoginBox(true);
-          attachLoginHandler();
-        }
-      };
-      passwordInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') loginBtn.click();
-      });
-      usernameInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') passwordInput.focus();
-      });
-    }
-    attachLoginHandler();
-
-    // Terminal logic
     const terminalSection = document.getElementById('terminal-section');
-    const terminalContent = document.getElementById('terminal-content');
-    // Add input line
-    let inputLine = document.createElement('input');
-    inputLine.type = 'text';
-    inputLine.id = 'terminal-input';
-    inputLine.spellcheck = false;
-    inputLine.style.background = 'transparent';
-    inputLine.style.color = '#0f0';
-    inputLine.style.border = 'none';
-    inputLine.style.fontFamily = 'inherit';
-    inputLine.style.fontSize = 'inherit';
-    inputLine.style.width = '320px';
-    inputLine.style.outline = 'none';
-    inputLine.autocomplete = 'off';
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalAscii = document.getElementById('terminal-ascii');
 
-    terminalSection.appendChild(inputLine);
+    usernameInput.focus();
 
-    function scrollTerminal() {
-      terminalSection.scrollTop = terminalSection.scrollHeight;
+    loginBtn.onclick = function () {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+      if (username === 'User' && password === 'External') {
+        loginSection.style.display = 'none';
+        terminalSection.style.display = '';
+        setTimeout(() => terminalInput.focus(), 50);
+      } else {
+        loginError.style.display = 'block';
+      }
+    };
+    usernameInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') passwordInput.focus();
+    });
+    passwordInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+
+    // TERMINAL LOGIC
+    let terminalLines = [
+      "+---------------------------------------------------+",
+      "|                                                   |",
+      "|             NEWUSER TERMINAL INTERFACE            |",
+      "|                                                   |",
+      "+---------------------------------------------------+",
+      "|   Access granted. Welcome, NewUser.               |",
+      "|                                                   |",
+      "|   Type \"help\" for commands.                       |",
+      "|                                                   |",
+      "|   uusseerr@error:~$                                  |",
+      "+---------------------------------------------------+"
+    ];
+    function updateTerminal(linesArr) {
+      terminalAscii.textContent = linesArr.join('\n');
     }
-
+    function padLine(content) {
+      const pad = 47 - content.length;
+      return "|   " + content + ' '.repeat(Math.max(0,pad)) + "|";
+    }
     function printToTerminal(str) {
-      // Each line gets a '|   ...   |' ASCII border
+      // Remove last prompt line and box line
+      terminalLines.splice(-2,2);
       str.split('\n').forEach(line => {
-        let pad = 47 - line.length;
-        if (pad < 0) pad = 0;
-        terminalContent.innerHTML += "\n|   " + line + ' '.repeat(pad) + "|";
+        terminalLines.push(padLine(line));
       });
-      scrollTerminal();
+      // Add prompt and box bottom
+      terminalLines.push(padLine('uusseerr@error:~$'));
+      terminalLines.push("+---------------------------------------------------+");
+      updateTerminal(terminalLines);
     }
-
-    function printPrompt() {
-      printToTerminal('newuser@arg:~$');
+    function clearTerminal() {
+      terminalLines = [
+        "+---------------------------------------------------+",
+        "|                                                   |",
+        "|             NEWUSER TERMINAL INTERFACE            |",
+        "|                                                   |",
+        "+---------------------------------------------------+",
+        padLine("Access granted. Welcome, NewUser."),
+        padLine(""),
+        padLine('Type "help" for commands.'),
+        padLine(""),
+        padLine('uusseerr@error:~$'),
+        "+---------------------------------------------------+"
+      ];
+      updateTerminal(terminalLines);
     }
-
-    inputLine.addEventListener('keydown', function(e) {
-      if (e`
-
+    terminalInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const cmd = terminalInput.value.trim();
+        if (cmd !== "") {
+          printToTerminal('newuser@arg:~$ ' + cmd);
+          // Command responses
+          let output = '';
+          switch(cmd) {
+            case 'help':
+              output = [
+                'Available commands:',
+                '  help    - Show this help',
+                '  about   - What is this?',
+                '  clear   - Clear the terminal',
+                '  echo X  - Print X'
+              ].join('\n');
+              break;
+            case 'about':
+              output = [
+                'This is an ARG Terminal for NewUser.',
+                'Find the hidden clues. Good luck!'
+              ].join('\n');
+              break;
+            case 'clear':
+              clearTerminal();
+              terminalInput.value = "";
+              return;
+            default:
+              if (cmd.startsWith('echo ')) {
+                output = cmd.slice(5);
+              } else {
+                output = 'Command not found. Type "help" for commands.';
+              }
+          }
+          printToTerminal(output);
+        } else {
+          printToTerminal('newuser@arg:~$');
+        }
+        terminalInput.value = "";
+      }
+    });
+    terminalSection.addEventListener('click', () => terminalInput.focus());
+    terminalInput.addEventListener('blur', () => setTimeout(() => terminalInput.focus(), 50));
+  </script>
+</body>
+</html>
